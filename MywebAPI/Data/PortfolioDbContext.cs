@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using MywebAPI.Data.Entities;
-
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 namespace MywebAPI.Data;
 
-public class PortfolioDbContext : DbContext
+public class PortfolioDbContext : IdentityDbContext<User>
 {
     public PortfolioDbContext(DbContextOptions<PortfolioDbContext> options)
         : base(options)
