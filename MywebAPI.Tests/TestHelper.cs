@@ -17,6 +17,8 @@ public static class TestHelper
         return new PortfolioDbContext(options);
     }
 
+    // ---------- Projecten ----------
+
     // zet direct een project in de database (voor de Arrange-stap)
     public static Project VoegProjectToe(PortfolioDbContext db, string titel = "Bestaand project")
     {
@@ -52,5 +54,38 @@ public static class TestHelper
         Categorie = "Backend",
         GitHubUrl = "https://github.com/MMesto/gewijzigd",
         Datum = new DateTime(2026, 11, 15)
+    };
+
+    // ---------- Blogposts ----------
+
+    // zet direct een blogpost in de database (voor de Arrange-stap)
+    public static Blogpost VoegBlogpostToe(PortfolioDbContext db, string titel = "Bestaande blogpost")
+    {
+        var blogpost = new Blogpost
+        {
+            Titel = titel,
+            Inhoud = "Inhoud van de blogpost",
+            Publicatiedatum = new DateTime(2026, 11, 1)
+        };
+
+        db.Blogposts.Add(blogpost);
+        db.SaveChanges();
+        return blogpost;
+    }
+
+    // geldige invoer voor POST
+    public static CreateBlogpostDto NieuweBlogpost(string titel = "Nieuwe blogpost") => new()
+    {
+        Titel = titel,
+        Inhoud = "Inhoud van de nieuwe blogpost",
+        Publicatiedatum = new DateTime(2026, 11, 1)
+    };
+
+    // geldige invoer voor PUT
+    public static UpdateBlogpostDto GewijzigdeBlogpost(string titel = "Gewijzigde blogpost") => new()
+    {
+        Titel = titel,
+        Inhoud = "Aangepaste inhoud",
+        Publicatiedatum = new DateTime(2026, 11, 15)
     };
 }
