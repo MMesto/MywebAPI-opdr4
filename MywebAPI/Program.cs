@@ -14,9 +14,26 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<PortfolioDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("PortfolioDb")));
 
-// Identity: gebruikers en rollen opslaan via EF Core in dezelfde database
-builder.Services.AddIdentity<User, IdentityRole>()
+builder.Services.AddIdentity<User, IdentityRole>(options =>
+    {
+        options.User.RequireUniqueEmail = true;
+    })
     .AddEntityFrameworkStores<PortfolioDbContext>();
+
+    builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.Cookie.HttpOnly = true;
+    options.Events.OnRedirectToLogin = context =>
+    {
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        return Task.CompletedTask;
+    };
+    options.Events.OnRedirectToAccessDenied = context =>
+    {
+        context.Response.StatusCode = StatusCodes.Status403Forbidden;
+        return Task.CompletedTask;
+    };
+});
 
 // scoped = nieuwe instantie per request, net als de DbContext
 builder.Services.AddScoped<ProjectService>();
