@@ -25,13 +25,11 @@ public class AuthController : ControllerBase
         var user = new User { UserName = dto.Email, Email = dto.Email };
 
         var result = await _userManager.CreateAsync(user, dto.Wachtwoord);
-        if (!result.Succeeded)
+            if (!result.Succeeded)
         {
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError(error.Code, error.Description);
-            }
-            return ValidationProblem(ModelState);
+            // bijv. "Passwords must have at least one digit"
+            var fouten = result.Errors.Select(e => e.Description).ToList();
+            return BadRequest(fouten);
         }
 
         await _userManager.AddToRoleAsync(user, Rollen.Gast);

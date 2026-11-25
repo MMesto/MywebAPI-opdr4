@@ -37,8 +37,7 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
 });
 
     builder.Services.AddAuthorizationBuilder()
-        .AddPolicy(Policies.KanSchrijven, policy =>
-            policy.RequireRole(Rollen.Editor, Rollen.Admin));
+    .AddPolicy(Policies.KanSchrijven, Policies.KanSchrijvenRegel);
 
 // scoped = nieuwe instantie per request, net als de DbContext
 builder.Services.AddScoped<ProjectService>();
