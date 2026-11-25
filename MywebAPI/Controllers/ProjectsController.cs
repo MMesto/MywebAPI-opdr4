@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MywebAPI.Auth;
 using MywebAPI.Dtos;
 using MywebAPI.Services;
 
@@ -16,12 +18,14 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpGet]
+    [AllowAnonymous] 
     public ActionResult<List<ProjectDto>> GetAll()
     {
         return _service.GetAll();
     }
 
     [HttpGet("{id:int}")]
+    [AllowAnonymous] 
     public ActionResult<ProjectDto> GetById(int id)
     {
         var project = _service.GetById(id);
@@ -33,6 +37,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = Policies.KanSchrijven)] 
     public ActionResult<ProjectDto> Create(CreateProjectDto dto)
     {
         var created = _service.Create(dto);
@@ -41,6 +46,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpPut("{id:int}")]
+    [Authorize(Policy = Policies.KanSchrijven)] 
     public IActionResult Update(int id, UpdateProjectDto dto)
     {
         var gelukt = _service.Update(id, dto);
@@ -52,6 +58,7 @@ public class ProjectsController : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Policy = Policies.KanSchrijven)]
     public IActionResult Delete(int id)
     {
         var gelukt = _service.Delete(id);

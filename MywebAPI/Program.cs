@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MywebAPI.Data;
 using MywebAPI.Data.Entities;
 using MywebAPI.Services;
+using MywebAPI.Auth;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,10 @@ builder.Services.AddIdentity<User, IdentityRole>(options =>
         return Task.CompletedTask;
     };
 });
+
+    builder.Services.AddAuthorizationBuilder()
+        .AddPolicy(Policies.KanSchrijven, policy =>
+            policy.RequireRole(Rollen.Editor, Rollen.Admin));
 
 // scoped = nieuwe instantie per request, net als de DbContext
 builder.Services.AddScoped<ProjectService>();
