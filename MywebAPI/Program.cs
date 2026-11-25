@@ -46,8 +46,13 @@ builder.Services.AddScoped<BlogpostService>();
 
 var app = builder.Build();
 
-app.UseSwagger();
-app.UseSwaggerUI();
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+
+    await GebruikerSeeder.SeedAsync(app.Services, app.Configuration);
+}
 
 app.UseAuthentication();
 app.UseAuthorization();
