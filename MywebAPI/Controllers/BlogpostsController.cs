@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using MywebAPI.Dtos;
 using MywebAPI.Services;
+using Microsoft.AspNetCore.Authorization;
+using MywebAPI.Auth;
 
 namespace MywebAPI.Controllers;
 
@@ -16,12 +18,14 @@ public class BlogpostsController : ControllerBase
     }
 
     [HttpGet]
+    [AllowAnonymous]
     public ActionResult<List<BlogpostDto>> GetAll()
     {
         return _service.GetAll();
     }
 
     [HttpGet("{id:int}")]
+    [AllowAnonymous]
     public ActionResult<BlogpostDto> GetById(int id)
     {
         var blogpost = _service.GetById(id);
@@ -33,6 +37,7 @@ public class BlogpostsController : ControllerBase
     }
 
     [HttpPost]
+    [Authorize(Policy = Policies.KanSchrijven)]
     public ActionResult<BlogpostDto> Create(CreateBlogpostDto dto)
     {
         var created = _service.Create(dto);
@@ -41,6 +46,8 @@ public class BlogpostsController : ControllerBase
     }
 
     [HttpPut("{id:int}")]
+    [Authorize(Policy = Policies.KanSchrijven)]
+
     public IActionResult Update(int id, UpdateBlogpostDto dto)
     {
         var gelukt = _service.Update(id, dto);
@@ -52,6 +59,8 @@ public class BlogpostsController : ControllerBase
     }
 
     [HttpDelete("{id:int}")]
+    [Authorize(Policy = Policies.KanSchrijven)]
+
     public IActionResult Delete(int id)
     {
         var gelukt = _service.Delete(id);
